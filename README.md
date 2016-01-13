@@ -2,7 +2,6 @@
 vp24 editor with react.js
 
 # setup
-
 - checkout
 - npm install
 - npm start
