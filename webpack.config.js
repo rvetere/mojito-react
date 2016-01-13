@@ -10,6 +10,8 @@ const PATHS = {
     build: path.join(__dirname, 'build')
 };
 
+process.env.BABEL_ENV = TARGET;
+
 // postcss plugins
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var stylelint = require('stylelint');
@@ -19,6 +21,12 @@ const common = {
     // Entry accepts a path or an object of entries.
     // The build chapter contains an example of the latter.
     entry: PATHS.app,
+    // Add resolve.extensions. '' is needed to allow imports
+    // without an extension. Note the .'s before extensions!!!
+    // The matching will fail without!
+    resolve: {
+        extensions: ['', '.js', '.jsx']
+    },
     output: {
         path: PATHS.build,
         filename: 'bundle.js'
@@ -39,6 +47,15 @@ const common = {
                 loader: ExtractTextPlugin.extract('style-loader?sourceMap', ['css-loader?sourceMap', 'postcss-loader?sourceMap', 'sass-loader?sourceMap']),
                 //loaders: ['style', 'css?sourceMap', 'sass?sourceMap'],
                 // Include accepts either a path or an array of paths.
+                include: PATHS.app
+            },
+            // Set up jsx. This accepts js too thanks to RegExp
+            {
+                test: /\.jsx?$/,
+                // Enable caching for improved performance during development
+                // It uses default OS directory by default. If you need something
+                // more custom, pass a path to it. I.e., babel?cacheDirectory=<path>
+                loaders: ['babel?cacheDirectory'],
                 include: PATHS.app
             }
         ]
@@ -63,7 +80,9 @@ const common = {
 
     plugins: [
         new htmlWebpackPlugin({
-            title: 'vp24 react app'
+            title: 'vp24 react app',
+            template: 'node_modules/html-webpack-template/index.html',
+            appMountId: 'app'
         }),
         new ExtractTextPlugin('styles.css')
     ]
