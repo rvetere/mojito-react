@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "node_modules/.bin/webpack",
-    "start": "webpack-dev-server"
+    "start": "webpack-dev-server",
+    "lint": "eslint . --ext .js --ext .jsx"
   },
   "repository": {
     "type": "git",
@@ -19,13 +20,26 @@
   },
   "homepage": "https://github.com/rvetere/mojito-react#readme",
   "devDependencies": {
+    "babel-eslint": "^4.1.6",
+    "css-loader": "^0.23.1",
+    "eslint": "^1.10.3",
+    "eslint-loader": "^1.2.0",
+    "eslint-plugin-react": "^3.15.0",
     "html-webpack-plugin": "^1.7.0",
+    "postcss-loader": "^0.8.0",
+    "sass-loader": "^3.1.2",
+    "style-loader": "^0.13.0",
+    "stylelint": "^3.2.2",
     "webpack": "^1.12.11",
     "webpack-dev-server": "^1.14.1",
     "webpack-merge": "^0.7.3"
   },
+  "peerDependencies": {
+    "webpack": "^1.12.11"
+  },
   "dependencies": {
     "babel-preset-react": "^6.3.13",
+    "extract-text-webpack-plugin": "^1.0.1",
     "react": "^0.14.6",
     "react-dom": "^0.14.6"
   }
