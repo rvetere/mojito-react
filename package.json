@@ -45,9 +45,12 @@
     "webpack": "^1.12.11"
   },
   "dependencies": {
+    "alt": "^0.18.1",
+    "alt-utils": "^1.0.0",
     "babel-preset-react": "^6.3.13",
     "extract-text-webpack-plugin": "^1.0.1",
     "node-uuid": "^1.4.7",
+    "object-assign": "^4.0.1",
     "react": "^0.14.6",
     "react-dom": "^0.14.6"
   }
