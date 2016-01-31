@@ -53,7 +53,10 @@
     "extract-text-webpack-plugin": "^1.0.1",
     "node-uuid": "^1.4.7",
     "object-assign": "^4.0.1",
-    "react": "^0.14.6",
-    "react-dom": "^0.14.6"
+    "react": "^0.14.7",
+    "react-addons-update": "^0.14.7",
+    "react-dnd": "^2.0.2",
+    "react-dnd-html5-backend": "^2.0.2",
+    "react-dom": "^0.14.7"
   }
 }
