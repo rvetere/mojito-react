@@ -8,8 +8,6 @@ import NoteStore from '../stores/NoteStore';
 
 export default class App extends React.Component {
 	render() {
-		const notes = this.state.notes;
-
 		//debugger;
 		return (
 			<div>
