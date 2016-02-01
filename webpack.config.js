@@ -71,6 +71,7 @@ const common = {
 	]
 };
 
+// Developement mode, with server included on http://localhost:2300
 if (TARGET === 'start' || !TARGET) {
 	module.exports = merge(common, {
 		devtool: 'source-map',
@@ -101,7 +102,6 @@ if (TARGET === 'start' || !TARGET) {
 					// Test expects a RegExp! Note the slashes!
 					test: /\.scss$/,
 					loaders: ['style-loader?sourceMap', 'css-loader?sourceMap', 'postcss-loader?sourceMap', 'sass-loader?sourceMap'],
-					//loaders: ['style', 'css?sourceMap', 'sass?sourceMap'],
 					// Include accepts either a path or an array of paths.
 					include: PATHS.app
 				}
@@ -113,6 +113,7 @@ if (TARGET === 'start' || !TARGET) {
 	});
 }
 
+// Production build, will work with 2 entry points, app.js and vendor.js - generating minified, optimized and digested versions
 if (TARGET === 'build' || TARGET === 'stats') {
 	module.exports = merge(common, {
 		entry: {
