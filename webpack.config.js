@@ -30,14 +30,6 @@ const common = {
 	},
 	module: {
 		loaders: [
-			{
-				// Test expects a RegExp! Note the slashes!
-				test: /\.scss$/,
-				loader: ExtractTextPlugin.extract('style-loader?sourceMap', ['css-loader?sourceMap', 'postcss-loader?sourceMap', 'sass-loader?sourceMap']),
-				//loaders: ['style', 'css?sourceMap', 'sass?sourceMap'],
-				// Include accepts either a path or an array of paths.
-				include: PATHS.app
-			},
 			// Set up jsx. This accepts js too thanks to RegExp
 			{
 				test: /\.jsx?$/,
@@ -105,7 +97,14 @@ if (TARGET === 'start' || !TARGET) {
 				}
 			],
 			loaders: [
-
+				{
+					// Test expects a RegExp! Note the slashes!
+					test: /\.scss$/,
+					loaders: ['style-loader?sourceMap', 'css-loader?sourceMap', 'postcss-loader?sourceMap', 'sass-loader?sourceMap'],
+					//loaders: ['style', 'css?sourceMap', 'sass?sourceMap'],
+					// Include accepts either a path or an array of paths.
+					include: PATHS.app
+				}
 			]
 		},
 		plugins: [
@@ -132,6 +131,14 @@ if (TARGET === 'build' || TARGET === 'stats') {
 		},
 		module: {
 			loaders: [
+				{
+					// Test expects a RegExp! Note the slashes!
+					test: /\.scss$/,
+					loader: ExtractTextPlugin.extract('style-loader?sourceMap', ['css-loader?sourceMap', 'postcss-loader?sourceMap', 'sass-loader?sourceMap']),
+					//loaders: ['style', 'css?sourceMap', 'sass?sourceMap'],
+					// Include accepts either a path or an array of paths.
+					include: PATHS.app
+				},
 				// Extract CSS during build
 				{
 					test: /\.css$/,
