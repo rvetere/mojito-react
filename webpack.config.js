@@ -14,7 +14,8 @@ const pkg = require('./package.json');
 const TARGET = process.env.npm_lifecycle_event;
 const PATHS = {
 	app: path.join(__dirname, 'app'),
-	build: path.join(__dirname, 'build')
+	build: path.join(__dirname, 'build'),
+	test: path.join(__dirname, 'tests')
 };
 
 process.env.BABEL_ENV = TARGET;
@@ -110,6 +111,32 @@ if (TARGET === 'start' || !TARGET) {
 		plugins: [
 			new webpack.HotModuleReplacementPlugin()
 		]
+	});
+}
+
+if (TARGET === 'test' || TARGET === 'tdd') {
+	module.exports = merge(common, {
+		entry: {}, // karma will set this
+		output: {}, // karma will set this
+		devtool: 'inline-source-map',
+		resolve: {
+			alias: {
+				'app': PATHS.app
+			}
+		},
+		module: {
+			preLoaders: [
+				{
+					test: /\.jsx?$/,
+					loaders: ['isparta-instrumenter'],
+					include: PATHS.app
+				}],
+			loaders: [{
+				test: /\.jsx?$/,
+				loaders: ['babel?cacheDirectory'],
+				include: PATHS.test
+			}]
+		}
 	});
 }
 
