@@ -97,4 +97,19 @@ const noteTarget = {
     }
 }
 
+Lane.propTypes = {
+    lane: React.PropTypes.shape({
+        id: React.PropTypes.string.isRequired,
+        editing: React.PropTypes.bool,
+        name: React.PropTypes.string,
+        notes: React.PropTypes.array
+    }).isRequired,
+    connectDropTarget: React.PropTypes.func
+};
+
+Lane.defaultProps = {
+    name: '',
+    notes: []
+};
+
 export default Lane

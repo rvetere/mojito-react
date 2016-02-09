@@ -6,10 +6,12 @@ const noteSource = {
     beginDrag(props) {
         return {
             id: props.id
-        }; },
+        };
+    },
     isDragging(props, monitor) {
         return props.id === monitor.getItem().id;
-    } };
+    }
+};
 
 const noteTarget = {
     hover(targetProps, monitor) {
@@ -101,5 +103,18 @@ const noteTarget = {
         });
     };
 }
+
+Note.propTypes = {
+    id: React.PropTypes.string.isRequired,
+    connectDragSource: React.PropTypes.func,
+    connectDropTarget: React.PropTypes.func,
+    isDragging: React.PropTypes.bool,
+    onMove: React.PropTypes.func
+};
+
+Note.defaultProps = {
+    onMove: () => {
+    }
+};
 
 export default Note
