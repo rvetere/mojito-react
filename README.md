@@ -1,5 +1,5 @@
 # mojito-react
-vp24 editor with react.js and webpack
+vp24 editor with react.js and webpack (and sass, bootstrap, jquery and a flux implementation)
 
 ## setup
 - checkout
