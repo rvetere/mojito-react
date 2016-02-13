@@ -3,7 +3,7 @@ import Editable from './Editable.jsx';
 import Note from './Note.jsx';
 import LaneActions from '../actions/LaneActions';
 
-const Notes = ({notes, onValueClick, onEdit, onDelete}) => {
+const Notes = ({notes, onValueClick, onEdit, onDelete, onMove}) => {
     return (
         <ul className="notes">{notes.map((note) => <Note className="note" id={note.id} key={note.id} onMove={onMove}>
                     <Editable
