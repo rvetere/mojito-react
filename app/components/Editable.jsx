@@ -6,13 +6,13 @@ class Editable extends React.Component {
         return (
             <div {...props}>
                 {editing ? this.renderEdit() : this.renderValue()} </div>
-        );
+            );
     }
 
     renderEdit = () => {
         return <input type="text"
-                      autoFocus={true} placeholder={this.props.value} onBlur={this.finishEdit}
-                      onKeyPress={this.checkEnter}/>;
+            autoFocus={true} placeholder={this.props.value} onBlur={this.finishEdit}
+            onKeyPress={this.checkEnter}/>;
     };
     renderValue = () => {
         const onDelete = this.props.onDelete;
@@ -20,7 +20,7 @@ class Editable extends React.Component {
             <div onClick={this.props.onValueClick}>
                 <span className="value">{this.props.value}</span>
                 {onDelete ? this.renderDelete() : null } </div>
-        );
+            );
     };
     renderDelete = () => {
         return <button className="delete" onClick={this.props.onDelete}>x</button>;

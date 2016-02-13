@@ -13,7 +13,7 @@ trim_trailing_whitespace = true
 # Tab indentation (no size specified)
 [*.js]
 indent_style = tab
-tab_width = 2
+tab_width = 4
 
 # Indentation override for all JS under lib directory
 #[lib/**.js]

@@ -1,5 +1,5 @@
 import React from 'react';
-import {DragSource, DropTarget} from 'react-dnd';
+import { DragSource, DropTarget } from 'react-dnd';
 import ItemTypes from '../constants/itemTypes';
 
 const noteSource = {
@@ -19,18 +19,22 @@ const noteTarget = {
         const sourceProps = monitor.getItem();
         const sourceId = sourceProps.id;
         if (sourceId !== targetId) {
-            targetProps.onMove({sourceId, targetId});
+            targetProps.onMove({
+                sourceId,
+                targetId
+            });
         }
     }
 };
 
 @DragSource(ItemTypes.NOTE, noteSource, (connect, monitor) => ({
-    connectDragSource: connect.dragSource(),
-    isDragging: monitor.isDragging() // map isDragging() state to isDragging prop
-}))
+        connectDragSource: connect.dragSource(),
+        isDragging: monitor.isDragging() // map isDragging() state to isDragging prop
+    }))
 @DropTarget(ItemTypes.NOTE, noteTarget, (connect) => ({
     connectDropTarget: connect.dropTarget()
-})) class Note extends React.Component {
+}))
+class Note extends React.Component {
     constructor(props) {
         super(props);
         // Track `editing` state.
@@ -40,8 +44,7 @@ const noteTarget = {
     }
 
     render() {
-        const {connectDragSource, connectDropTarget, isDragging,
-            onMove, id, ...props} = this.props;
+        const {connectDragSource, connectDropTarget, isDragging, onMove, id, ...props} = this.props;
         return connectDragSource(connectDropTarget(
             <li style={{
                 opacity: isDragging ? 0 : 1
@@ -52,10 +55,10 @@ const noteTarget = {
     renderEdit = () => {
         // Deal with blur and input handlers. These map to DOM events.
         return <input type="text"
-                      autoFocus={true}
-                      placeholder={this.props.task}
-                      onBlur={this.finishEdit}
-                      onKeyPress={this.checkEnter}/>;
+            autoFocus={true}
+            placeholder={this.props.task}
+            onBlur={this.finishEdit}
+            onKeyPress={this.checkEnter}/>;
     };
     renderNote = () => {
         const onDelete = this.props.onDelete;
@@ -66,7 +69,7 @@ const noteTarget = {
                 <span className="task">{this.props.task}</span>
                 {onDelete ? this.renderDelete() : null}
             </div>
-        );
+            );
     };
     renderDelete = () => {
         return <button
