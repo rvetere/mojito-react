@@ -14,7 +14,8 @@ const pkg = require('./package.json');
 
 const TARGET = process.env.npm_lifecycle_event;
 const PATHS = {
-    app: path.join(__dirname, 'app'),
+    app: path.join(__dirname, 'app'), // the page only, what we will publish -> everything without "_editor"
+    editor: path.join(__dirname, 'app/_editor'), // the page, extended by _editor components -> this will build the vp24 editor ;)
     build: path.join(__dirname, 'build'),
     test: path.join(__dirname, 'tests')
 };
@@ -22,7 +23,7 @@ const PATHS = {
 process.env.BABEL_ENV = TARGET;
 
 const common = {
-    entry: PATHS.app,
+    entry: PATHS.editor,
     resolve: {
         extensions: ['', '.js', '.jsx']
     },
@@ -65,9 +66,10 @@ const common = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: 'node_modules/html-webpack-template/index.html',
-            title: 'vp24 react app',
-            appMountId: 'app',
+            template: 'index.html',
+            title: 'vistapage editor',
+            appMountId: 'page',
+            excludeChunks: ['page'],
             inject: false
         }),
         new ExtractTextPlugin('styles.css')
@@ -116,6 +118,7 @@ if (TARGET === 'start' || !TARGET) {
     });
 }
 
+// Test mode
 if (TARGET === 'test' || TARGET === 'tdd') {
     module.exports = merge(common, {
         entry: {}, // karma will set this
@@ -146,7 +149,8 @@ if (TARGET === 'test' || TARGET === 'tdd') {
 if (TARGET === 'build' || TARGET === 'stats') {
     module.exports = merge(common, {
         entry: {
-            app: PATHS.app,
+            app: PATHS.editor,
+            page: PATHS.app,
             vendor: Object.keys(pkg.dependencies).filter(function(v) {
                 // Exclude alt-utils as it won't work with this setup
                 // due to the way the package has been designed
@@ -178,6 +182,14 @@ if (TARGET === 'build' || TARGET === 'stats') {
             ]
         },
         plugins: [
+            new HtmlWebpackPlugin({
+                template: 'index.html',
+                title: 'vistapage page',
+                appMountId: 'page',
+                excludeChunks: ['app'],
+                filename: 'page.html',
+                inject: false
+            }),
             new Clean([PATHS.build], {
                 verbose: false // Don't write logs to console
             }),
@@ -185,7 +197,7 @@ if (TARGET === 'build' || TARGET === 'stats') {
             new ExtractTextPlugin('styles.[chunkhash].css'),
             // Extract vendor and manifest files
             new webpack.optimize.CommonsChunkPlugin({
-                names: ['vendor', 'manifest']
+                names: ['page', 'vendor', 'manifest']
             }),
             // Setting DefinePlugin affects React library size!
             new webpack.DefinePlugin({
