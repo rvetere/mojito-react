@@ -69,10 +69,8 @@ const common = {
             template: 'index.html',
             title: 'vistapage editor',
             appMountId: 'page',
-            excludeChunks: ['page'],
             inject: false
-        }),
-        new ExtractTextPlugin('styles.css')
+        })
     ]
 };
 
@@ -149,8 +147,7 @@ if (TARGET === 'test' || TARGET === 'tdd') {
 if (TARGET === 'build' || TARGET === 'stats') {
     module.exports = merge(common, {
         entry: {
-            app: PATHS.editor,
-            page: PATHS.app,
+            editor: PATHS.editor,
             vendor: Object.keys(pkg.dependencies).filter(function(v) {
                 // Exclude alt-utils as it won't work with this setup
                 // due to the way the package has been designed
@@ -182,27 +179,85 @@ if (TARGET === 'build' || TARGET === 'stats') {
             ]
         },
         plugins: [
-            new HtmlWebpackPlugin({
-                template: 'index.html',
-                title: 'vistapage page',
-                appMountId: 'page',
-                excludeChunks: ['app'],
-                filename: 'page.html',
-                inject: false
-            }),
             new Clean([PATHS.build], {
                 verbose: false // Don't write logs to console
             }),
+
             // Output extracted CSS to a file
             new ExtractTextPlugin('styles.[chunkhash].css'),
+
             // Extract vendor and manifest files
             new webpack.optimize.CommonsChunkPlugin({
-                names: ['page', 'vendor', 'manifest']
+                names: ['vendor', 'manifest']
             }),
+
             // Setting DefinePlugin affects React library size!
             new webpack.DefinePlugin({
                 'process.env.NODE_ENV': JSON.stringify('production')
             }),
+
+            new webpack.optimize.UglifyJsPlugin({
+                compress: {
+                    warnings: false
+                }
+            })
+        ]
+    });
+}
+
+// Production build, but with page-only mode (everything withouth "_editor", this is what we will publish for a vp24 website)
+if (TARGET === 'build-page') {
+    module.exports = merge(common, {
+        entry: {
+            app: PATHS.app,
+            vendor: Object.keys(pkg.dependencies).filter(function(v) {
+                // Exclude alt-utils as it won't work with this setup
+                // due to the way the package has been designed
+                // (no package.json main).
+                return v !== 'alt-utils';
+            })
+        },
+        output: {
+            path: PATHS.build,
+            filename: '[name].[chunkhash].js',
+            chunkFilename: '[chunkhash].js'
+        },
+        module: {
+            loaders: [
+                {
+                    // Test expects a RegExp! Note the slashes!
+                    test: /\.scss$/,
+                    loader: ExtractTextPlugin.extract('style-loader?sourceMap', ['css-loader?sourceMap', 'postcss-loader?sourceMap', 'sass-loader?sourceMap']),
+                    //loaders: ['style', 'css?sourceMap', 'sass?sourceMap'],
+                    // Include accepts either a path or an array of paths.
+                    include: PATHS.app
+                },
+                // Extract CSS during build
+                {
+                    test: /\.css$/,
+                    loader: ExtractTextPlugin.extract('style', 'css'),
+                    include: PATHS.app
+                }
+            ]
+        },
+        plugins: [
+            new Clean([PATHS.build], {
+                verbose: false // Don't write logs to console
+            }),
+
+            // Output extracted CSS to a file
+            new ExtractTextPlugin('styles.[chunkhash].css'),
+
+            // Extract vendor and manifest files
+            new webpack.optimize.CommonsChunkPlugin({
+                names: ['vendor', 'manifest']
+            }),
+
+            // Setting DefinePlugin affects React library size!
+            new webpack.DefinePlugin({
+                'process.env.NODE_ENV': JSON.stringify('production')
+            }),
+
             new webpack.optimize.UglifyJsPlugin({
                 compress: {
                     warnings: false
